@@ -13,7 +13,12 @@ A SOC-style credential auditing dashboard that scans bulk password data against 
 
 ## 📸 Preview
 
-> _Add screenshots or a screen-recording GIF here once captured — see [Screen Recording Tips](#-screen-recording-tips) below._
+
+https://github.com/user-attachments/assets/12ec226e-4ef5-4e09-9442-b21d4c18b72c
+
+
+
+
 
 
 ## 🧭 Overview
