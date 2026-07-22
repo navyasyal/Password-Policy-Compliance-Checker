@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+output/last_scan.json
+output/compliance_report.csv
+output/summary.txt

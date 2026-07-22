@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}PolicyGuard{% endblock %} · Password Compliance Console</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Fonts: Inter for UI, JetBrains Mono for data/credentials -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- App styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- =========================================================
+       SIDEBAR NAVIGATION
+       ========================================================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><i class="bi bi-shield-lock-fill"></i></div>
+      <div class="brand-text">
+        <span class="brand-title">PolicyGuard</span>
+        <span class="brand-sub">Compliance Console</span>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a href="{{ url_for('index') }}" class="side-link {{ 'active' if request.endpoint == 'index' else '' }}">
+        <i class="bi bi-grid-1x2-fill"></i><span>Home Dashboard</span>
+      </a>
+      <a href="{{ url_for('dashboard') }}" class="side-link {{ 'active' if request.endpoint == 'dashboard' else '' }}">
+        <i class="bi bi-bar-chart-line-fill"></i><span>Scan Results</span>
+      </a>
+      <a href="{{ url_for('settings') }}" class="side-link {{ 'active' if request.endpoint == 'settings' else '' }}">
+        <i class="bi bi-sliders"></i><span>Policy Settings</span>
+      </a>
+      <a href="{{ url_for('reports') }}" class="side-link {{ 'active' if request.endpoint == 'reports' else '' }}">
+        <i class="bi bi-file-earmark-arrow-down-fill"></i><span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="side-status">
+      <span class="pulse-dot"></span>
+      <div>
+        <div class="status-title">Engine Online</div>
+        <div class="status-sub">Local scan engine ready</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================
+       MAIN CONTENT
+       ========================================================= -->
+  <div class="main-col">
+
+    <header class="topbar">
+      <div>
+        <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
+        <p class="topbar-sub">{% block page_sub %}{% endblock %}</p>
+      </div>
+      <div class="topbar-right">
+        <div class="scope-chip"><i class="bi bi-hdd-network"></i> Local CSV Scan Scope</div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+          {% for category, message in messages %}
+            <div class="alert glass-alert alert-{{ 'danger' if category=='danger' else category }} alert-dismissible fade show" role="alert">
+              <i class="bi {{ 'bi-exclamation-triangle-fill' if category=='danger' else 'bi-check-circle-fill' if category=='success' else 'bi-info-circle-fill' }}"></i>
+              <span>{{ message }}</span>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+</div>
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

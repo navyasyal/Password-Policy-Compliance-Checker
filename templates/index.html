@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block page_title %}Home Dashboard{% endblock %}
+{% block page_sub %}Ingest credentials, run a scan, review compliance at a glance{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================
+     HERO / PROJECT INTRO
+     ============================================================ -->
+<section class="glass-card hero-card fade-in-up">
+  <div class="hero-icon"><i class="bi bi-shield-check"></i></div>
+  <div class="hero-text">
+    <h2>Password Policy Compliance Checker</h2>
+    <p>
+      A SOC-style credential auditing tool that validates a batch of passwords against
+      a configurable security policy &mdash; flagging weak, reused, and common
+      passwords, scoring strength, and generating exportable compliance reports.
+    </p>
+    <div class="hero-tags">
+      <span class="tag"><i class="bi bi-check2-circle"></i> Policy Validation</span>
+      <span class="tag"><i class="bi bi-graph-up-arrow"></i> Strength Scoring</span>
+      <span class="tag"><i class="bi bi-arrow-repeat"></i> Reuse Detection</span>
+      <span class="tag"><i class="bi bi-file-earmark-bar-graph"></i> Exportable Reports</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INGESTION + SCAN CONTROLS
+     ============================================================ -->
+<div class="row g-4 mt-1">
+
+  <!-- Upload CSV -->
+  <div class="col-lg-6">
+    <div class="glass-card action-card fade-in-up delay-1">
+      <div class="card-head">
+        <i class="bi bi-cloud-arrow-up-fill"></i>
+        <h3>Upload Credential CSV</h3>
+      </div>
+      <p class="muted">
+        Upload a <code>Username,Password</code> CSV file. This replaces the active
+        data set at <code>input/{{ csv_name }}</code>, ready for the next scan.
+      </p>
+      <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <label class="dropzone" for="csv_file">
+          <i class="bi bi-file-earmark-spreadsheet"></i>
+          <span id="fileLabel">Choose or drop a .csv file</span>
+        </label>
+        <input class="d-none" type="file" name="csv_file" id="csv_file" accept=".csv" required>
+        <button type="submit" class="btn btn-outline-security w-100 mt-3">
+          <i class="bi bi-upload"></i> Upload CSV
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Run Analysis -->
+  <div class="col-lg-6">
+    <div class="glass-card action-card fade-in-up delay-2">
+      <div class="card-head">
+        <i class="bi bi-radar"></i>
+        <h3>Run Compliance Scan</h3>
+      </div>
+      <p class="muted">
+        Analyzes the active data set at <code>input/{{ csv_name }}</code> against the
+        current policy in <code>config/policy.json</code>, then writes fresh
+        <code>compliance_report.csv</code> and <code>summary.txt</code> reports.
+      </p>
+      <div class="status-line">
+        <i class="bi {{ 'bi-check-circle-fill text-security-green' if active_csv_exists else 'bi-exclamation-circle-fill text-security-red' }}"></i>
+        <span>{{ 'Active data set detected and ready to scan.' if active_csv_exists else 'No data set found &mdash; upload a CSV first.' }}</span>
+      </div>
+      <form action="{{ url_for('analyze') }}" method="post">
+        <button type="submit" class="btn btn-security w-100 mt-3" {{ 'disabled' if not active_csv_exists else '' }}>
+          <i class="bi bi-play-fill"></i> Analyze
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     RECENT SCAN SUMMARY
+     ============================================================ -->
+<section class="glass-card mt-4 fade-in-up delay-3">
+  <div class="card-head">
+    <i class="bi bi-clock-history"></i>
+    <h3>Recent Scan Summary</h3>
+  </div>
+
+  {% if last_scan %}
+    <p class="muted mb-3">Last run: <span class="mono">{{ last_scan.timestamp }}</span></p>
+    <div class="row g-3 recent-grid">
+      <div class="col-6 col-md-3">
+        <div class="mini-stat"><span class="mini-label">Total</span><span class="mini-value">{{ last_scan.total }}</span></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="mini-stat"><span class="mini-label">Passed</span><span class="mini-value text-security-green">{{ last_scan.passed }}</span></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="mini-stat"><span class="mini-label">Failed</span><span class="mini-value text-security-red">{{ last_scan.failed }}</span></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="mini-stat"><span class="mini-label">Compliance</span><span class="mini-value text-security-blue">{{ last_scan.compliance_pct }}%</span></div>
+      </div>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-security mt-4">
+      <i class="bi bi-bar-chart-line-fill"></i> View Full Dashboard
+    </a>
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-inboxes"></i>
+      <p>No scans have been run yet. Upload a CSV and click <strong>Analyze</strong> to get started.</p>
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const fileInput = document.getElementById('csv_file');
+  const fileLabel = document.getElementById('fileLabel');
+  fileInput.addEventListener('change', () => {
+    fileLabel.textContent = fileInput.files.length ? fileInput.files[0].name : 'Choose or drop a .csv file';
+  });
+</script>
+{% endblock %}

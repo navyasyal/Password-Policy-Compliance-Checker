@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Policy Settings{% endblock %}
+{% block page_title %}Policy Settings{% endblock %}
+{% block page_sub %}Configure the rules used by the compliance engine{% endblock %}
+
+{% block content %}
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="glass-card fade-in-up">
+      <div class="card-head">
+        <i class="bi bi-sliders"></i>
+        <h3>Edit Password Policy</h3>
+      </div>
+      <p class="muted">
+        Changes are written to <code>config/policy.json</code> and used by the
+        original <code>validate_password()</code> engine the next time you click
+        <strong>Analyze</strong>.
+      </p>
+
+      <form action="{{ url_for('settings') }}" method="post" class="settings-form">
+
+        <div class="form-field">
+          <label for="min_length">Minimum Length</label>
+          <input type="number" min="1" max="128" class="form-control mono-input"
+                 id="min_length" name="min_length" value="{{ policy.min_length }}" required>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <span class="switch-title">Require Uppercase</span>
+            <span class="switch-sub">At least one A&ndash;Z character</span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch"
+                   name="require_uppercase" id="require_uppercase" {{ 'checked' if policy.require_uppercase }}>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <span class="switch-title">Require Lowercase</span>
+            <span class="switch-sub">At least one a&ndash;z character</span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch"
+                   name="require_lowercase" id="require_lowercase" {{ 'checked' if policy.require_lowercase }}>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <span class="switch-title">Require Digit</span>
+            <span class="switch-sub">At least one numeric character</span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch"
+                   name="require_digit" id="require_digit" {{ 'checked' if policy.require_digit }}>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <span class="switch-title">Require Special Character</span>
+            <span class="switch-sub">e.g. ! @ # $ % ^ &amp; *</span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch"
+                   name="require_special" id="require_special" {{ 'checked' if policy.require_special }}>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <span class="switch-title">Prevent Reuse</span>
+            <span class="switch-sub">Flag passwords shared by multiple users</span>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch"
+                   name="prevent_reuse" id="prevent_reuse" {{ 'checked' if policy.prevent_reuse }}>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-security w-100 mt-4">
+          <i class="bi bi-save-fill"></i> Save Policy
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div class="col-lg-5">
+    <section class="glass-card fade-in-up delay-1">
+      <div class="card-head">
+        <i class="bi bi-file-earmark-code"></i>
+        <h3>Current policy.json</h3>
+      </div>
+      <pre class="policy-preview mono">{{ policy | tojson(indent=4) }}</pre>
+      <div class="empty-state-inline">
+        <i class="bi bi-info-circle"></i>
+        <span>Saving re-writes this file directly &mdash; no manual editing required.</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock %}
