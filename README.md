@@ -2,7 +2,7 @@
 
 A SOC-style credential auditing dashboard that scans bulk password data against a configurable security policy — flagging weak, reused, and common passwords, scoring strength, and generating exportable compliance reports.
 
-**🔗 Live Demo:** [policygaurd.vercel.app](https://policygaurd.vercel.app/)
+**🔗 Live Demo:** [Policy Gaurd App](https://password-policy-compliance-checker.onrender.com/)
 
 ![Status](https://img.shields.io/badge/status-live-22c55e?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.10+-3b82f6?style=flat-square)
@@ -15,15 +15,6 @@ A SOC-style credential auditing dashboard that scans bulk password data against 
 
 > _Add screenshots or a screen-recording GIF here once captured — see [Screen Recording Tips](#-screen-recording-tips) below._
 
-| Home Dashboard | Scan Results |
-|---|---|
-| `screenshots/home.png` | `screenshots/dashboard.png` |
-
-| Details Modal | Policy Settings |
-|---|---|
-| `screenshots/details.png` | `screenshots/settings.png` |
-
----
 
 ## 🧭 Overview
 
@@ -101,8 +92,7 @@ requirements.txt
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/<your-username>/policyguard.git
-cd policyguard
+git clone https://github.com/navyasyal/Password-Policy-Compliance-Checker
 pip install -r requirements.txt
 python app.py
 ```
@@ -168,4 +158,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## 🙋 About
 
-Built by [Your Name] as a portfolio project exploring practical policy enforcement and compliance reporting for cybersecurity/SOC-GRC roles.
+Built by Navya Syal as a portfolio project exploring practical policy enforcement and compliance reporting for cybersecurity/SOC-GRC roles.
